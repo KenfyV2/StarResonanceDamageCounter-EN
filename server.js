@@ -281,7 +281,7 @@ class UserData {
         this.healingStats = new StatisticData(this, '治疗');
         this.takenDamage = 0; // 承伤
         this.deadCount = 0; // 死亡次数
-        this.profession = '未知';
+        this.profession = 'unknown';
         this.skillUsage = new Map(); // 技能使用情况
         this.fightPoint = 0; // 总评分
         this.subProfession = '';
