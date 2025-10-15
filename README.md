@@ -4,8 +4,9 @@
 [![Node.js](https://img.shields.io/badge/Node.js-22%2B-green.svg)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-10.13.1-orange.svg)](https://pnpm.io/)
 
-> **Note:** This is a fork of [dmlgzs/StarResonanceDamageCounter](https://github.com/dmlgzs/StarResonanceDamageCounter). 
-> All code and documentation credit goes to the original author. This fork only provides English translation.
+> **Note:** This is a fork of [dmlgzs/StarResonanceDamageCounter](https://github.com/dmlgzs/StarResonanceDamageCounter).
+> This fork provides English translations of Chinese text in the code, comments, and documentation.
+> All credit for the original work goes to dmlgzs and contributors.
 > English translation provided by [KenfyV2]
 
 A real-time combat data statistics tool for the game *Star Resonance*. It uses network packet capture technology to analyze combat data in real-time, providing damage statistics, DPS calculations, and more.
