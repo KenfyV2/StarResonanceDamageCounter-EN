@@ -1,30 +1,30 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>星痕共鸣实时战斗数据</title>
+        <title>BP: Star Resonance DPS Meter</title>
         <script src="echarts.min.js"></script>
         <script src="socket.io.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css" />
     </head>
 
     <body>
-        <h1 id="appTitle">🎯 星痕共鸣实时战斗数据展示</h1>
+        <h1 id="appTitle">🎯 BP: Star Resonance DPS Meter</h1>
         <div style="margin: 20px 0"></div>
-        <button class="main-button" onclick="clearData()">🗑️ 清空数据</button>
-        <button class="main-button" id="pauseButton" onclick="togglePause()">⏸️ 暂停统计</button>
-        <button class="main-button" onclick="openHpWindow()">❤️ 血条监控</button>
-        <button class="main-button" onclick="toggleHistoryModal()">📜 历史数据</button>
-        <button class="main-button" onclick="toggleDarkMode()">🌙 夜间模式</button>
-        <button class="main-button" onclick="toggleSimpleMode()">📋 简洁模式</button>
-        <button class="main-button" onclick="toggleControlsModal()">👤 用户管理</button>
-        <button class="main-button" onclick="toggleSettingsModal()">⚙️ 统计设置</button>
+        <button class="main-button" onclick="clearData()">🗑️ Clear Data</button>
+        <button class="main-button" id="pauseButton" onclick="togglePause()">⏸️ Pause</button>
+        <button class="main-button" onclick="openHpWindow()">❤️ Monitor HP</button>
+        <button class="main-button" onclick="toggleHistoryModal()">📜 Past Encounters</button>
+        <button class="main-button" onclick="toggleDarkMode()">🌙 Night Mode</button>
+        <button class="main-button" onclick="toggleSimpleMode()">📋 Simple Mode</button>
+        <button class="main-button" onclick="toggleControlsModal()">👤 User Control Panel</button>
+        <button class="main-button" onclick="toggleSettingsModal()">⚙️ Settings</button>
 
         <!-- 历史数据弹窗 -->
         <div id="historyModal" class="modal">
             <div class="modal-content" style="width: 95vw; max-width: 95vw; max-height: 95vh; margin: 1% auto">
                 <div class="modal-header">
-                    <h2 class="modal-title">📜 历史数据</h2>
+                    <h2 class="modal-title">📜 Past Encounters</h2>
                     <span class="close-button" onclick="toggleHistoryModal()">&times;</span>
                 </div>
                 <div class="modal-body" style="padding: 0px">
@@ -37,13 +37,13 @@
         <div id="controlsModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title">👤 用户控制面板</h2>
+                    <h2 class="modal-title">👤 User Control Panel</h2>
                     <span class="close-button" onclick="toggleControlsModal()">&times;</span>
                 </div>
                 <div class="modal-body">
                     <div style="margin-bottom: 15px; text-align: center">
-                        <button onclick="toggleAllUsers()">🔄 全选/取消全选</button>
-                        <button onclick="clearNicknames()">🗑️ 清空所有昵称</button>
+                        <button onclick="toggleAllUsers()">🔄 Select All/Deselect All</button>
+                        <button onclick="clearNicknames()">🗑️ Clear All Nicknames</button>
                     </div>
                     <div
                         id="userControlsList"
@@ -59,15 +59,15 @@
         <div id="settingsModal" class="modal">
             <div class="modal-content" style="width: 400px; max-width: 95vw; margin: 5% auto">
                 <div class="modal-header">
-                    <h2 class="modal-title">⚙️ 统计设置</h2>
+                    <h2 class="modal-title">⚙️ Settings</h2>
                     <span class="close-button" onclick="toggleSettingsModal()">&times;</span>
                 </div>
                 <div class="modal-body">
                     <form id="settingsForm">
-                        <label><input type="checkbox" id="settingAutoClearOnServerChange" /> 切图切线后自动分段数据</label><br />
-                        <label><input type="checkbox" id="settingAutoClearOnTimeout" /> 15秒未战斗自动分段数据</label><br />
-                        <label><input type="checkbox" id="settingOnlyRecordEliteDummy" /> 只记录协会精英木桩数据</label><br />
-                        <button type="button" onclick="saveSettings()" style="margin-top: 15px">保存设置</button>
+                        <label><input type="checkbox" id="settingAutoClearOnServerChange" /> Automatically segment data after cutting the graph</label><br />
+                        <label><input type="checkbox" id="settingAutoClearOnTimeout" /> Automatic segmentation data after 15 seconds of no combat</label><br />
+                        <label><input type="checkbox" id="settingOnlyRecordEliteDummy" /> Record only elite association log data</label><br />
+                        <button type="button" onclick="saveSettings()" style="margin-top: 15px">Save Settings</button>
                     </form>
                 </div>
             </div>
@@ -79,42 +79,42 @@
                 <div class="skill-modal-header">
                     <h2 class="skill-modal-title">
                         <i class="icon">📊</i>
-                        <span id="skillUserName">技能参与统计</span>
+                        <span id="skillUserName">Skill Participation Statistics</span>
                     </h2>
                     <span class="skill-modal-close" onclick="closeSkillModal()">&times;</span>
                 </div>
                 <div class="skill-modal-body">
                     <div class="skill-user-info">
                         <div class="skill-user-info-item">
-                            <div class="skill-user-info-label">用户ID</div>
+                            <div class="skill-user-info-label">User ID</div>
                             <div class="skill-user-info-value" id="skillUserId">-</div>
                         </div>
                         <div class="skill-user-info-item">
-                            <div class="skill-user-info-label">角色昵称</div>
+                            <div class="skill-user-info-label">Character Nickname</div>
                             <div class="skill-user-info-value" id="skillUserNickname">-</div>
                         </div>
                         <div class="skill-user-info-item">
-                            <div class="skill-user-info-label">职业</div>
+                            <div class="skill-user-info-label">Occupation</div>
                             <div class="skill-user-info-value" id="skillUserProfession">-</div>
                         </div>
                         <div class="skill-user-info-item">
-                            <div class="skill-user-info-label">战力评分</div>
+                            <div class="skill-user-info-label">Combat Power Rating</div>
                             <div class="skill-user-info-value" id="fightPoint">-</div>
                         </div>
                         <div class="skill-user-info-item">
-                            <div class="skill-user-info-label">最大HP</div>
+                            <div class="skill-user-info-label">Max HP</div>
                             <div class="skill-user-info-value" id="maxHp">-</div>
                         </div>
                         <div class="skill-user-info-item">
-                            <div class="skill-user-info-label">技能数量</div>
+                            <div class="skill-user-info-label">Number of Skills</div>
                             <div class="skill-user-info-value" id="skillCount">-</div>
                         </div>
                     </div>
 
                     <div class="skill-view-toggle">
                         <div class="skill-view-toggle-buttons">
-                            <button class="skill-view-btn active" data-view="damage" onclick="switchSkillView('damage')">伤害技能</button>
-                            <button class="skill-view-btn" data-view="healing" onclick="switchSkillView('healing')">治疗技能</button>
+                            <button class="skill-view-btn active" data-view="damage" onclick="switchSkillView('damage')">Damage Skills</button>
+                            <button class="skill-view-btn" data-view="healing" onclick="switchSkillView('healing')">Healing Skills</button>
                         </div>
                     </div>
 
@@ -127,15 +127,15 @@
                         <table class="skill-table" id="skillTable">
                             <thead>
                                 <tr>
-                                    <th>技能名称</th>
-                                    <th>元素</th>
-                                    <th>占比</th>
-                                    <th>总数值</th>
-                                    <th>次数</th>
-                                    <th>暴击率</th>
-                                    <th>幸运触发率</th>
-                                    <th>暴击数值</th>
-                                    <th>普通数值</th>
+                                    <th>Skill Name</th>
+                                    <th>Element</th>
+                                    <th>Percentage</th>
+                                    <th>Total value</th>
+                                    <th>Number of times</th>
+                                    <th>Critical Hit Rate</th>
+                                    <th>Lucky Hit Rate</th>
+                                    <th>Critical Hit Value</th>
+                                    <th>Ordinary values</th>
                                 </tr>
                             </thead>
                             <tbody id="skillTableBody"></tbody>
@@ -149,26 +149,26 @@
         <div id="updateModal" class="update-modal">
             <div class="update-modal-content">
                 <div class="update-modal-header">
-                    <h2 class="update-modal-title">🚀 发现新版本</h2>
+                    <h2 class="update-modal-title">🚀 New version found</h2>
                     <button class="update-modal-close" onclick="closeUpdateModal()">&times;</button>
                 </div>
                 <div class="update-modal-body">
-                    <p>检测到有新版本可用，建议及时更新以获得最佳使用体验！</p>
+                    <p>A new version is available. We recommend updating promptly for the best experience!</p>
 
                     <div class="version-info">
                         <div class="current-version">
-                            <span>当前版本</span>
+                            <span>Current version</span>
                             <span id="currentVersionText">---</span>
                         </div>
                         <div class="latest-version">
-                            <span>最新版本</span>
+                            <span>Latest Version</span>
                             <span id="latestVersionText">---</span>
                         </div>
                     </div>
 
                     <div class="update-buttons">
-                        <a id="downloadLink" href="#" target="_blank" class="update-btn update-btn-primary"> 📥 前往下载 </a>
-                        <button onclick="closeUpdateModal()" class="update-btn update-btn-secondary">⏭️ 稍后提醒</button>
+                        <a id="downloadLink" href="#" target="_blank" class="update-btn update-btn-primary"> 📥 Go to Download </a>
+                        <button onclick="closeUpdateModal()" class="update-btn update-btn-secondary">⏭️ Remind me later</button>
                     </div>
                 </div>
             </div>
@@ -176,13 +176,13 @@
 
         <!-- 服务器状态提示 -->
         <div id="serverStatus" class="server-status">
-            <span id="serverStatusText">连接中...</span>
+            <span id="serverStatusText">Connecting...</span>
         </div>
 
         <!-- DPS折线图 -->
         <div class="chart-container">
             <h3 style="margin-top: 0; display: flex; justify-content: space-between; align-items: center">
-                📈 DPS趋势
+                📈 DPS Trend
                 <div style="display: flex; align-items: center; gap: 10px">
                     <span id="chartStatus" style="font-size: 12px; color: #666; font-weight: normal"></span>
                     <button
@@ -220,68 +220,68 @@
 
         <div class="card">
             <div style="margin: 20px 0">
-                <label for="sortSelect" style="margin-right: 10px; font-weight: bold">排序方式:</label>
+                <label for="sortSelect" style="margin-right: 10px; font-weight: bold">Sorting method:</label>
                 <select
                     id="sortSelect"
                     onchange="updateSortMode()"
                     style="padding: 8px 12px; font-size: 14px; border-radius: 5px; border: 1px solid #ddd; background-color: white"
                 >
-                    <option value="uid">按UID排序 (升序)</option>
-                    <option value="fightPoint">按评分排序 (降序)</option>
-                    <option value="takenDamage">按承伤排序 (降序)</option>
-                    <option value="damage">按总伤害排序 (降序)</option>
-                    <option value="dps">按总DPS排序 (降序)</option>
-                    <option value="realtimeDpsMax">按最大瞬时DPS排序 (降序)</option>
-                    <option value="healing">按总治疗排序 (降序)</option>
-                    <option value="hps">按总HPS排序 (降序)</option>
-                    <option value="realtimeHpsMax">按最大瞬时HPS排序 (降序)</option>
-                    <option value="hp_min">按剩余HP排序 (升序)</option>
+                    <option value="uid">Sort by UID (Ascending)</option>
+                    <option value="fightPoint">Sort by Rating (Descending)</option>
+                    <option value="takenDamage">Sort by Damage Taken (Descending)</option>
+                    <option value="damage">Sort by Total Damage (Descending order)</option>
+                    <option value="dps">Sort by Total DPS (Descending order)</option>
+                    <option value="realtimeDpsMax">Sort by Maximum Instantaneous DPS (Descending order)</option>
+                    <option value="healing">Sort by Total Healing (Descending)</option>
+                    <option value="hps">Sort by Total HPS (Descending)</option>
+                    <option value="realtimeHpsMax">Sort by Maximum Instantaneous HPS (Descending order)</option>
+                    <option value="hp_min">Sort by Remaining HP (Ascending order)</option>
                 </select>
             </div>
             <!-- 数据组显示控制 -->
             <div class="data-group-controls">
-                <button id="damageGroupBtn" class="data-group-button active" onclick="toggleDataGroup('damage')">⚔️ 伤害&DPS</button>
-                <button id="healingGroupBtn" class="data-group-button" onclick="toggleDataGroup('healing')">❤️ 治疗&HPS</button>
-                <button id="allGroupBtn" class="data-group-button" onclick="toggleDataGroup('all')">📊 全部数据</button>
-                <button id="hideInactiveBtn" class="data-group-button" onclick="toggleHideInactiveUsers()">👀 隐藏未参战</button>
-                <button class="data-group-button" onclick="openColumnSettings()">⚙️ 表格设置</button>
+                <button id="damageGroupBtn" class="data-group-button active" onclick="toggleDataGroup('damage')">⚔️ Damage & DPS</button>
+                <button id="healingGroupBtn" class="data-group-button" onclick="toggleDataGroup('healing')">❤️ Healing & HPS</button>
+                <button id="allGroupBtn" class="data-group-button" onclick="toggleDataGroup('all')">📊 All data</button>
+                <button id="hideInactiveBtn" class="data-group-button" onclick="toggleHideInactiveUsers()">👀 Hide non-participants</button>
+                <button class="data-group-button" onclick="openColumnSettings()">⚙️ Table Settings</button>
             </div>
             <div class="table-container">
                 <table id="damageTable">
                     <thead>
                         <tr>
-                            <th rowspan="2" title="角色唯一标识符">角色ID</th>
-                            <th rowspan="2" title="角色昵称/自定义昵称">角色昵称</th>
-                            <th rowspan="2" title="角色职业">职业</th>
-                            <th rowspan="2" title="角色评分">评分</th>
+                            <th rowspan="2" title="角色唯一标识符">Character ID</th>
+                            <th rowspan="2" title="角色昵称/自定义昵称">Character Nickname</th>
+                            <th rowspan="2" title="角色职业">Occupation</th>
+                            <th rowspan="2" title="角色评分">Rating</th>
                             <th rowspan="2" title="角色血量">HP</th>
-                            <th rowspan="2" title="角色在战斗中受到的伤害">承伤</th>
-                            <th rowspan="2" title="角色在战斗中死亡次数">死亡</th>
-                            <th rowspan="2" title="角色在战斗中的暴击伤害次数占总伤害次数的比例">暴击率</th>
-                            <th rowspan="2" title="角色在战斗中的幸运伤害次数占总伤害次数的比例">幸运率</th>
-                            <th class="damage-main-col" colspan="4">伤害</th>
-                            <th class="damage-simple-col" style="display: none" colspan="1">伤害</th>
+                            <th rowspan="2" title="角色在战斗中受到的伤害">Damage Taken</th>
+                            <th rowspan="2" title="角色在战斗中死亡次数">Death</th>
+                            <th rowspan="2" title="角色在战斗中的暴击伤害次数占总伤害次数的比例">Critical Hit Rate</th>
+                            <th rowspan="2" title="角色在战斗中的幸运伤害次数占总伤害次数的比例">Lucky Hit Rate</th>
+                            <th class="damage-main-col" colspan="4">Damage</th>
+                            <th class="damage-simple-col" style="display: none" colspan="1">Damage</th>
                             <th class="dps-col" colspan="3">DPS</th>
-                            <th class="healing-main-col" colspan="4">治疗</th>
-                            <th class="healing-simple-col" style="display: none" colspan="1">治疗</th>
+                            <th class="healing-main-col" colspan="4">Healing</th>
+                            <th class="healing-simple-col" style="display: none" colspan="1">Healing</th>
                             <th class="hps-col" colspan="3">HPS</th>
-                            <th rowspan="2">操作</th>
+                            <th rowspan="2">Operation</th>
                         </tr>
                         <tr>
-                            <th class="damage-cols" title="角色在战斗中造成的总伤害">总伤害</th>
-                            <th class="damage-detail-cols" title="角色在战斗中造成的非幸运的暴击伤害">纯暴击</th>
-                            <th class="damage-detail-cols" title="角色在战斗中造成的非暴击的幸运伤害">纯幸运</th>
-                            <th class="damage-detail-cols" title="角色在战斗中造成的暴击的幸运伤害">暴击幸运</th>
-                            <th class="dps-cols" title="角色在战斗中的最近一秒造成的伤害">瞬时DPS</th>
-                            <th class="dps-cols" title="角色在战斗中的最大瞬时DPS">最大瞬时</th>
-                            <th class="dps-cols" title="角色在战斗中的总DPS（以第一次技能与最后一次技能之间的时间作为有效战斗时间计算）">总DPS</th>
-                            <th class="healing-cols" title="角色在战斗中造成的总治疗量">总治疗</th>
-                            <th class="healing-detail-cols" title="角色在战斗中造成的非幸运的暴击治疗量">纯暴击</th>
-                            <th class="healing-detail-cols" title="角色在战斗中造成的非暴击的幸运治疗量">纯幸运</th>
-                            <th class="healing-detail-cols" title="角色在战斗中造成的暴击的幸运治疗量">暴击幸运</th>
-                            <th class="hps-cols" title="角色在战斗中的最近一秒造成的伤害和治疗量">瞬时HPS</th>
-                            <th class="hps-cols" title="角色在战斗中的最大瞬时HPS">最大瞬时</th>
-                            <th class="hps-cols" title="角色在战斗中的总HPS（以第一次技能与最后一次技能之间的时间作为有效战斗时间计算）">总HPS</th>
+                            <th class="damage-cols" title="角色在战斗中造成的总伤害">Total Damage</th>
+                            <th class="damage-detail-cols" title="角色在战斗中造成的非幸运的暴击伤害">True Critical Hit</th>
+                            <th class="damage-detail-cols" title="角色在战斗中造成的非暴击的幸运伤害">True Luck</th>
+                            <th class="damage-detail-cols" title="角色在战斗中造成的暴击的幸运伤害">Critical Hit Luck</th>
+                            <th class="dps-cols" title="角色在战斗中的最近一秒造成的伤害">Instantaneous DPS</th>
+                            <th class="dps-cols" title="角色在战斗中的最大瞬时DPS">Maximum instantaneous</th>
+                            <th class="dps-cols" title="角色在战斗中的总DPS（以第一次技能与最后一次技能之间的时间作为有效战斗时间计算）">Total DPS</th>
+                            <th class="healing-cols" title="角色在战斗中造成的总治疗量">Overall Treatment</th>
+                            <th class="healing-detail-cols" title="角色在战斗中造成的非幸运的暴击治疗量">True Critical Hit</th>
+                            <th class="healing-detail-cols" title="角色在战斗中造成的非暴击的幸运治疗量">True Luck</th>
+                            <th class="healing-detail-cols" title="角色在战斗中造成的暴击的幸运治疗量">Critical Hit Luck</th>
+                            <th class="hps-cols" title="角色在战斗中的最近一秒造成的伤害和治疗量">Instantaneous HPS</th>
+                            <th class="hps-cols" title="角色在战斗中的最大瞬时HPS">Maximum instantaneous</th>
+                            <th class="hps-cols" title="角色在战斗中的总HPS（以第一次技能与最后一次技能之间的时间作为有效战斗时间计算）">Total HPS</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -291,11 +291,11 @@
 
         <div class="card" id="enemyCard">
             <h3 style="margin-top: 0; display: flex; align-items: center; gap: 8px">
-                🛡️ 怪物血条
+                🛡️ Monster Health Bar
                 <span id="enemySummary" class="enemy-summary"></span>
             </h3>
             <div id="enemyList" class="enemy-list">
-                <div class="enemy-empty">暂未发现敌方目标</div>
+                <div class="enemy-empty">No enemy targets detected at this time.</div>
             </div>
         </div>
 
@@ -356,8 +356,8 @@
             let currentSkillData = null;
             let currentSkillView = 'damage';
             const SKILL_VIEW_LABELS = {
-                damage: '伤害',
-                healing: '治疗',
+                damage: 'Damage',
+                healing: 'Healing',
             };
             let skillChartsResizeListenerRegistered = false;
 
@@ -398,13 +398,13 @@
             function copyUserData(userId) {
                 const user = getUserFromArray(userId);
                 if (!user) {
-                    console.error('未找到用户数据');
+                    console.error('No user data found');
                     return;
                 }
 
                 const hasValidName = user.name && user.name.trim() !== '';
                 const nickname = userNicknames[userId] || (hasValidName ? user.name : '') || '';
-                const copyText = `${nickname}#${userId} 伤害:${user.total_damage.total} 治疗:${user.total_healing.total} DPS:${user.total_dps.toFixed(2)} HPS:${user.total_hps.toFixed(2)}`;
+                const copyText = `${nickname}#${userId} Damage:${user.total_damage.total} Healing:${user.total_healing.total} DPS:${user.total_dps.toFixed(2)} HPS:${user.total_hps.toFixed(2)}`;
 
                 // 复制昵称到剪贴板
                 navigator.clipboard
@@ -414,7 +414,7 @@
                         showCopySuccess();
                     })
                     .catch((err) => {
-                        console.error('复制失败:', err);
+                        console.error('Copy failed:', err);
                         // 降级方案：使用传统方法复制
                         try {
                             const textArea = document.createElement('textarea');
@@ -425,7 +425,7 @@
                             document.body.removeChild(textArea);
                             showCopySuccess();
                         } catch (e) {
-                            console.error('降级复制方案也失败:', e);
+                            console.error('The downgrade replication plan also failed:', e);
                         }
                     });
             }
@@ -447,7 +447,7 @@
                 box-shadow: 0 2px 8px rgba(0,0,0,0.2);
                 animation: slideIn 0.3s ease-out;
             `;
-                toast.textContent = '✅ 已复制用户数据';
+                toast.textContent = '✅ User data has been copied.';
                 document.body.appendChild(toast);
 
                 // 3秒后移除提示
@@ -499,7 +499,7 @@
                 }
 
                 try {
-                    console.log('检查版本更新...');
+                    console.log('Check for version updates...');
 
                     // 从GitHub API获取最新release信息
                     const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases/latest`, {
@@ -515,18 +515,18 @@
                     const data = await response.json();
                     const latestVersion = data.tag_name;
 
-                    console.log(`当前版本: ${CURRENT_VERSION}, 最新版本: ${latestVersion}`);
+                    console.log(`Current version: ${CURRENT_VERSION}, Latest Version: ${latestVersion}`);
 
                     localStorage.setItem('lastUpdateCheck', now.toString());
 
                     if (isNewerVersion(latestVersion, CURRENT_VERSION)) {
-                        console.log('发现新版本！');
+                        console.log('New version discovered!');
                         showUpdateModal(latestVersion, data.html_url);
                     } else {
-                        console.log('当前已是最新版本');
+                        console.log('This is the latest version.');
                     }
                 } catch (error) {
-                    console.warn('检查版本更新失败:', error);
+                    console.warn('Failed to check for version updates:', error);
                 }
             }
 
@@ -615,10 +615,10 @@
                     if (data.code === 0) {
                         renderSkillData(data.data);
                     } else {
-                        console.error('获取技能数据失败:', data.msg);
+                        console.error('Failed to retrieve skill data:', data.msg);
                     }
                 } catch (error) {
-                    console.error('获取技能数据失败:', error);
+                    console.error('Failed to retrieve skill data:', error);
                 }
             }
 
@@ -628,11 +628,11 @@
 
                 // 更新用户信息
                 document.getElementById('skillUserId').textContent = skillData.uid;
-                document.getElementById('skillUserName').textContent = `${skillData.name || `UID:${skillData.uid}`} - 技能分析`;
+                document.getElementById('skillUserName').textContent = `${skillData.name || `UID:${skillData.uid}`} - Skill Analysis`;
                 document.getElementById('skillUserNickname').textContent = skillData.name;
-                document.getElementById('skillUserProfession').textContent = userInfo ? userInfo.profession || '未知' : '未知';
-                document.getElementById('fightPoint').textContent = userInfo ? userInfo.fightPoint || '未知' : '未知';
-                document.getElementById('maxHp').textContent = skillData.attr ? skillData.attr.max_hp || '未知' : '未知';
+                document.getElementById('skillUserProfession').textContent = userInfo ? userInfo.profession || 'Unknown' : 'Unknown';
+                document.getElementById('fightPoint').textContent = userInfo ? userInfo.fightPoint || 'Unknown' : 'Unknown';
+                document.getElementById('maxHp').textContent = skillData.attr ? skillData.attr.max_hp || 'Unknown' : 'Unknown';
 
                 currentSkillData = skillData;
 
@@ -641,7 +641,7 @@
             }
 
             function updateSkillDisplay() {
-                const typeLabel = SKILL_VIEW_LABELS[currentSkillView] || '技能';
+                const typeLabel = SKILL_VIEW_LABELS[currentSkillView] || 'Skill';
 
                 const tableBody = document.getElementById('skillTableBody');
                 const skillCountElement = document.getElementById('skillCount');
@@ -656,7 +656,7 @@
                         emptyRow.className = 'skill-empty-row';
                         const emptyCell = document.createElement('td');
                         emptyCell.colSpan = 10;
-                        emptyCell.textContent = `暂无${typeLabel}技能数据`;
+                        emptyCell.textContent = `Not available${typeLabel}Skill Data`;
                         emptyRow.appendChild(emptyCell);
                         tableBody.appendChild(emptyRow);
                     }
@@ -688,7 +688,7 @@
                     emptyRow.className = 'skill-empty-row';
                     const emptyCell = document.createElement('td');
                     emptyCell.colSpan = 10;
-                    emptyCell.textContent = `暂无${typeLabel}技能数据`;
+                    emptyCell.textContent = `Not available${typeLabel}Skill Data`;
                     emptyRow.appendChild(emptyCell);
                     tableBody.appendChild(emptyRow);
                     renderSkillCharts([], [], [], [], typeLabel);
@@ -792,7 +792,7 @@
                 skillChart2 = echarts.init(critChartEl);
 
                 if (!Array.isArray(skillNames) || skillNames.length === 0) {
-                    const emptyText = `暂无${typeLabel}技能数据`;
+                    const emptyText = `Not available${typeLabel}Skill Data`;
                     const emptyGraphic = {
                         type: 'text',
                         left: 'center',
@@ -806,14 +806,14 @@
 
                     skillChart1.setOption({
                         title: {
-                            text: `${typeLabel}技能数值分布`,
+                            text: `${typeLabel}Skill Value Distribution`,
                             left: 'center',
                             textStyle: { color: '#e2e8f0' },
                         },
                         graphic: emptyGraphic,
                         series: [
                             {
-                                name: `${typeLabel}技能数值`,
+                                name: `${typeLabel}Skill Values`,
                                 type: 'pie',
                                 data: [],
                             },
@@ -822,7 +822,7 @@
 
                     skillChart2.setOption({
                         title: {
-                            text: `${typeLabel}技能暴击率与幸运触发率`,
+                            text: `${typeLabel}Skill Critical Hit Rate and Luck Trigger Rate`,
                             left: 'center',
                             textStyle: { color: '#e2e8f0' },
                         },
@@ -858,7 +858,7 @@
                 if (otherDamages > 0) {
                     pieData.push({
                         value: otherDamages,
-                        name: '其他',
+                        name: 'Others',
                         label: {
                             show: true,
                             position: 'outside',
@@ -873,7 +873,7 @@
                 // 技能数值分布图
                 const damageOption = {
                     title: {
-                        text: `${typeLabel}技能数值分布`,
+                        text: `${typeLabel}Skill Value Distribution`,
                         left: 'center',
                         textStyle: { color: '#e2e8f0' },
                     },
@@ -892,7 +892,7 @@
                     },
                     series: [
                         {
-                            name: `${typeLabel}技能数值`,
+                            name: `${typeLabel}Skill Values`,
                             type: 'pie',
                             radius: ['40%', '70%'],
                             avoidLabelOverlap: false,
@@ -924,7 +924,7 @@
                 // 暴击率/幸运触发率对比图
                 const critOption = {
                     title: {
-                        text: `${typeLabel}技能暴击率与幸运触发率`,
+                        text: `${typeLabel}Skill Critical Hit Rate and Luck Trigger Rate`,
                         left: 'center',
                         textStyle: { color: '#e2e8f0' },
                     },
@@ -936,7 +936,7 @@
                         textStyle: { color: '#ecf0f1' },
                     },
                     legend: {
-                        data: ['暴击率', '幸运触发率'],
+                        data: ['Critical Hit Rate', 'Lucky Hit Rate'],
                         bottom: 10,
                         textStyle: { color: '#cbd5e0' },
                     },
@@ -959,7 +959,7 @@
                     },
                     yAxis: {
                         type: 'value',
-                        name: '百分比',
+                        name: 'Percentage',
                         min: 0,
                         max: 100,
                         axisLine: { lineStyle: { color: '#7f8c8d' } },
@@ -968,13 +968,13 @@
                     },
                     series: [
                         {
-                            name: '暴击率',
+                            name: 'Critical Hit Rate',
                             type: 'bar',
                             data: critRates,
                             itemStyle: { color: '#ff9966' },
                         },
                         {
-                            name: '幸运触发率',
+                            name: 'Lucky Hit Rate',
                             type: 'bar',
                             data: luckyRates,
                             itemStyle: { color: '#93f9b9' },
@@ -1137,29 +1137,29 @@
             // WebSocket连接初始化
             function initWebSocket() {
                 try {
-                    showServerStatus('reconnecting', '🔄 正在连接服务器...', false);
+                    showServerStatus('reconnecting', '🔄 Connecting to the server...', false);
                     socket = io();
 
                     socket.on('connect', () => {
-                        console.log('WebSocket连接成功');
+                        console.log('WebSocketConnectionSuccessful');
                         isWebSocketConnected = true;
                         lastWebSocketMessage = Date.now();
                         webSocketReconnectAttempts = 0;
-                        showServerStatus('connected', '✅ 服务器连接成功');
+                        showServerStatus('connected', '✅ Server connection successful');
 
                         // 如果之前启用了API备用，现在切换回WebSocket
                         if (fallbackToAPI) {
-                            console.log('WebSocket重连成功，从API模式切换回WebSocket模式');
+                            console.log('WebSocket reconnection successful. Switching back from API mode to WebSocket mode.');
                             fallbackToAPI = false;
                             stopAPIFallback();
                         }
                     });
 
                     socket.on('disconnect', () => {
-                        console.log('WebSocket连接断开');
+                        console.log('WebSocket connection disconnected');
                         isWebSocketConnected = false;
                         webSocketReconnectAttempts++;
-                        if (!fallbackToAPI) showServerStatus('disconnected', '❌ 服务器连接断开', false);
+                        if (!fallbackToAPI) showServerStatus('disconnected', '❌ Server connection lost', false);
                     });
 
                     socket.on('data', (data) => {
@@ -1171,13 +1171,13 @@
                     });
 
                     socket.on('connect_error', (error) => {
-                        console.error('WebSocket连接错误:', error);
+                        console.error('WebSocket connection error:', error);
                         isWebSocketConnected = false;
-                        if (!fallbackToAPI) showServerStatus('disconnected', '❌ 服务器连接失败', false);
+                        if (!fallbackToAPI) showServerStatus('disconnected', '❌ Server connection failed', false);
                     });
                 } catch (error) {
-                    console.error('WebSocket初始化失败:', error);
-                    showServerStatus('disconnected', '❌ WebSocket初始化失败', false);
+                    console.error('WebSocket initialization failed:', error);
+                    showServerStatus('disconnected', '❌ WebSocket initialization failed', false);
                     startAPIFallback();
                 }
             }
@@ -1191,9 +1191,9 @@
                     const timeSinceLastMessage = Date.now() - lastWebSocketMessage;
 
                     if (timeSinceLastMessage > 5000 && !fallbackToAPI) {
-                        console.warn('WebSocket超过5秒无消息，切换到API轮询模式');
+                        console.warn('If no messages are received via WebSocket for over 5 seconds, switch to API polling mode.');
                         fallbackToAPI = true;
-                        showServerStatus('api-mode', '📡 切换到API轮询模式', false);
+                        showServerStatus('api-mode', '📡 Switch to API polling mode', false);
                         startAPIFallback();
                     }
                 }, 5000); // 每5秒检查一次
@@ -1203,8 +1203,8 @@
             function startAPIFallback() {
                 if (apiInterval) return; // 避免重复启动
 
-                console.log('启动API轮询备用模式');
-                showServerStatus('api-mode', '📡 使用API轮询模式', false);
+                console.log('Enable API Polling Standby Mode');
+                showServerStatus('api-mode', '📡 Using API polling mode', false);
                 apiInterval = setInterval(fetchData, 100);
             }
 
@@ -1213,7 +1213,7 @@
                 if (apiInterval) {
                     clearInterval(apiInterval);
                     apiInterval = null;
-                    console.log('停止API轮询备用模式');
+                    console.log('Stopping API polling in standby mode');
                 }
             }
 
@@ -1242,10 +1242,10 @@
                 const btn = document.getElementById('hideInactiveBtn');
                 if (hideInactiveUsers) {
                     btn.classList.add('active');
-                    btn.innerHTML = '👀 已隐藏未参战';
+                    btn.innerHTML = '👀 Hidden and not participating in the battle';
                 } else {
                     btn.classList.remove('active');
-                    btn.innerHTML = '👀 隐藏未参战';
+                    btn.innerHTML = '👀 Hide non-participants';
                 }
 
                 // 重新处理当前数据
@@ -1289,7 +1289,7 @@
 
                 const entries = Object.entries(enemyData || {});
                 const parsed = entries.map(([id, info]) => {
-                    const name = info && typeof info.name === 'string' && info.name.trim().length > 0 ? info.name.trim() : `未知敌人 #${id}`;
+                    const name = info && typeof info.name === 'string' && info.name.trim().length > 0 ? info.name.trim() : `Unknown Enemy #${id}`;
                     const hp = Number(info?.hp ?? 0);
                     const maxHp = Number(info?.max_hp ?? 0);
                     return {
@@ -1300,11 +1300,11 @@
                     };
                 });
 
-                const validEnemies = parsed.filter((enemy) => (enemy.name || enemy.hp || enemy.maxHp) && !String(enemy.name).endsWith('-共鸣'));
+                const validEnemies = parsed.filter((enemy) => (enemy.name || enemy.hp || enemy.maxHp) && !String(enemy.name).endsWith('-Resonance'));
 
                 if (validEnemies.length === 0) {
-                    if (enemySummary) enemySummary.textContent = '共 0 个目标，存活 0 个';
-                    enemyList.innerHTML = '<div class="enemy-empty">暂未发现敌方目标</div>';
+                    if (enemySummary) enemySummary.textContent = '0 targets, 0 survivors 个';
+                    enemyList.innerHTML = '<div class="enemy-empty">No enemy targets detected at this time.</div>';
                     lastEnemySignature = '__empty__';
                     return;
                 }
@@ -1327,8 +1327,8 @@
                     const fillColor =
                         enemy.maxHp > 0 ? (enemy.hp <= 0 ? 'rgba(127, 140, 141, 0.35)' : 'rgba(231, 76, 60, 0.32)') : 'rgba(231, 76, 60, 0.18)';
                     const currentHp = Math.max(0, enemy.hp);
-                    const hpDisplay = `${formatNumber(currentHp)} / ${enemy.maxHp > 0 ? formatNumber(enemy.maxHp) : '未知'}`;
-                    const statusText = enemy.maxHp > 0 ? (enemy.hp <= 0 ? '已击败' : `${percent.toFixed(1)}%`) : '血量未知';
+                    const hpDisplay = `${formatNumber(currentHp)} / ${enemy.maxHp > 0 ? formatNumber(enemy.maxHp) : 'Unknown'}`;
+                    const statusText = enemy.maxHp > 0 ? (enemy.hp <= 0 ? '已击败' : `${percent.toFixed(1)}%`) : 'Health Points: Unknown';
                     const statusClass = enemy.maxHp > 0 && enemy.hp <= 0 ? 'enemy-status defeated' : 'enemy-status';
 
                     const item = document.createElement('div');
@@ -1348,7 +1348,7 @@
 
                 if (enemySummary) {
                     const aliveCount = sortedEnemies.filter((enemy) => enemy.hp > 0).length;
-                    enemySummary.textContent = `共 ${sortedEnemies.length} 个目标，存活 ${aliveCount} 个`;
+                    enemySummary.textContent = `共 ${sortedEnemies.length} 个Objective: Survival ${aliveCount} 个`;
                 }
             }
 
@@ -1393,7 +1393,7 @@
 
                     if (shouldEnablePerformanceMode !== performanceMode) {
                         performanceMode = shouldEnablePerformanceMode;
-                        console.log(`${performanceMode ? '启用' : '关闭'}性能模式 (用户数: ${activeUserCount})`);
+                        console.log(`${performanceMode ? 'Enable' : 'Close'}Performance Mode (Number of users: ${activeUserCount})`);
                     }
 
                     // 更新图表
@@ -1401,7 +1401,7 @@
                         updateChart(userArray);
                     }
                 } catch (err) {
-                    console.error('处理数据更新失败：', err);
+                    console.error('Handling data update failures:', err);
                 }
             }
 
@@ -1436,11 +1436,11 @@
 
                     // 其他数据列
                     const otherCells = [
-                        user.profession || '未知',
+                        user.profession || 'Unknown',
                         Number(user.fightPoint).toLocaleString(),
-                        (user.hp ?? '未知').toLocaleString(),
+                        (user.hp ?? 'Unknown').toLocaleString(),
                         Number(user.taken_damage).toLocaleString(),
-                        user.dead_count ?? '未知',
+                        user.dead_count ?? 'Unknown',
                         `${(crit_rate * 100).toFixed(2)}%`,
                         `${(lucky_rate * 100).toFixed(2)}%`,
                     ];
@@ -1524,14 +1524,14 @@
                         // 创建复制按钮
                         const copyButton = document.createElement('button');
                         copyButton.className = 'copy-btn';
-                        copyButton.innerHTML = '<i class="icon">📋</i> 复制数据';
+                        copyButton.innerHTML = '<i class="icon">📋</i> Copy data';
                         copyButton.setAttribute('data-user-id', user.id);
                         operationDiv.appendChild(copyButton);
 
                         // 创建技能按钮
                         const skillButton = document.createElement('button');
                         skillButton.className = 'skill-btn';
-                        skillButton.innerHTML = '<i class="icon">📊</i> 技能分析';
+                        skillButton.innerHTML = '<i class="icon">📊</i> Skill Analysis';
                         skillButton.setAttribute('data-user-id', user.id);
                         operationDiv.appendChild(skillButton);
                     }
@@ -1557,11 +1557,11 @@
 
                     // API请求成功时，如果显示的是断线状态，更新为API模式
                     if (fallbackToAPI) {
-                        showServerStatus('api-mode', '📡 API轮询模式运行中', false);
+                        showServerStatus('api-mode', '📡 API polling mode is running.', false);
                     }
                 } catch (err) {
-                    console.error('获取数据失败：', err);
-                    showServerStatus('disconnected', '❌ 无法获取服务器数据', false);
+                    console.error('Failed to retrieve data:', err);
+                    showServerStatus('disconnected', '❌ Unable to retrieve server data', false);
                 }
             }
 
@@ -1667,11 +1667,11 @@
 
                 if (isDarkMode) {
                     body.classList.remove('dark-mode');
-                    button.textContent = '🌙 夜间模式';
+                    button.textContent = '🌙 Night Mode';
                     localStorage.setItem('darkMode', 'false');
                 } else {
                     body.classList.add('dark-mode');
-                    button.textContent = '☀️ 日间模式';
+                    button.textContent = '☀️ Light Mode';
                     localStorage.setItem('darkMode', 'true');
                 }
             }
@@ -1683,11 +1683,11 @@
 
                 if (isSimpleMode) {
                     body.classList.remove('simple-mode');
-                    button.textContent = '📋 简洁模式';
+                    button.textContent = '📋 Simplified Mode';
                     localStorage.setItem('simpleMode', 'false');
                 } else {
                     body.classList.add('simple-mode');
-                    button.textContent = '📄 详细模式';
+                    button.textContent = '📄 Detailed Mode';
                     localStorage.setItem('simpleMode', 'true');
                 }
 
@@ -1706,7 +1706,7 @@
             function openHpWindow() {
                 // 首先尝试画中画模式
                 if ('documentPictureInPicture' in window && window.documentPictureInPicture.requestWindow) {
-                    console.log('尝试使用画中画模式打开血条监控');
+                    console.log('Try opening the health bar monitor using picture-in-picture mode.');
 
                     window.documentPictureInPicture
                         .requestWindow({
@@ -1723,7 +1723,7 @@
                             <head>
                                 <meta charset="UTF-8">
                                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                                <title>血条监控 - 星痕共鸣</title>
+                                <title>Health Bar Monitor - BP: Star Resonance</title>
                                 <style>
                                     * {
                                         margin: 0;
@@ -1750,21 +1750,21 @@
                                 </style>
                             </head>
                             <body>
-                                <iframe src="./hp_window.html" title="血条监控"></iframe>
+                                <iframe src="./hp_window.html" title="Health Bar Monitor"></iframe>
                             </body>
                             </html>
                         `);
                             pipWindow.document.close();
 
-                            console.log('血条监控窗口已在画中画模式下打开');
+                            console.log('The health bar monitoring window has been opened in picture-in-picture mode.');
                         })
                         .catch((error) => {
-                            console.error('画中画模式打开失败，降级到普通窗口:', error);
+                            console.error('Picture-in-picture mode failed to activate, downgraded to standard window:', error);
                             openHpWindowFallback();
                         });
                 } else {
-                    console.log('浏览器不支持画中画功能，使用普通窗口');
-                    alert('当前浏览器不支持画中画功能，建议使用 Chrome 116 以上版本的浏览器。');
+                    console.log('Your browser does not support picture-in-picture mode. Please use a standard window.');
+                    alert('Your current browser does not support picture-in-picture functionality. We recommend using Chrome version 116 or later.');
                     openHpWindowFallback();
                 }
             }
@@ -1780,13 +1780,13 @@
 
                     if (hpWindow) {
                         hpWindow.focus();
-                        console.log('血条监控窗口已在普通窗口模式下打开');
+                        console.log('The health bar monitoring window has been opened in standard window mode.');
                     } else {
-                        throw new Error('无法打开新窗口，请检查浏览器弹窗拦截设置');
+                        throw new Error('Unable to open a new window. Please check your browser\'s pop-up blocker settings.');
                     }
                 } catch (error) {
-                    console.error('打开血条监控窗口失败:', error);
-                    alert('打开血条监控窗口失败: ' + error.message + '\n\n请检查浏览器是否阻止了弹窗。');
+                    console.error('Failed to open the health bar monitoring window:', error);
+                    alert('Failed to open the health bar monitoring window: ' + error.message + '\n\nPlease check if your browser is blocking pop-ups.');
                 }
             }
 
@@ -1796,13 +1796,13 @@
                 const button = document.getElementById('pauseButton');
 
                 if (isPaused) {
-                    button.textContent = '▶️ 开始统计';
-                    console.log('统计已暂停');
+                    button.textContent = '▶️ Resume';
+                    console.log('Statistics have been suspended.');
                     // 暂停时停止API轮询
                     stopAPIFallback();
                 } else {
-                    button.textContent = '⏸️ 暂停统计';
-                    console.log('统计已开始');
+                    button.textContent = '⏸️ Pause';
+                    console.log('Statistics have begun.');
                     // 重新开始时，如果是API模式则重新启动
                     if (fallbackToAPI) {
                         startAPIFallback();
@@ -1820,7 +1820,7 @@
                     },
                     body: JSON.stringify({ paused: isPaused }),
                 }).catch((err) => {
-                    console.error('设置暂停状态失败：', err);
+                    console.error('Failed to set pause status:', err);
                 });
             }
 
@@ -1835,7 +1835,7 @@
                     chartContent.style.height = '350px';
                     chartContent.style.opacity = '1';
                     toggleBtn.classList.remove('collapsed');
-                    toggleBtn.title = '隐藏图表';
+                    toggleBtn.title = 'Hide Chart';
 
                     // 重新初始化图表
                     if (!chart) {
@@ -1852,7 +1852,7 @@
                     chartContent.style.height = '0px';
                     chartContent.style.opacity = '0';
                     toggleBtn.classList.add('collapsed');
-                    toggleBtn.title = '显示图表';
+                    toggleBtn.title = 'Display Chart';
                 }
 
                 localStorage.setItem('chartVisible', isChartVisible.toString());
@@ -1866,7 +1866,7 @@
 
                 if (isDarkMode) {
                     body.classList.add('dark-mode');
-                    button.textContent = '☀️ 日间模式';
+                    button.textContent = '☀️ Light Mode';
                 }
             }
 
@@ -1877,7 +1877,7 @@
 
                 if (isSimpleMode) {
                     body.classList.add('simple-mode');
-                    button.textContent = '📄 详细模式';
+                    button.textContent = '📄 Detailed Mode';
                 }
             }
 
@@ -1950,12 +1950,12 @@
                     chartContent.style.height = '0px';
                     chartContent.style.opacity = '0';
                     toggleBtn.classList.add('collapsed');
-                    toggleBtn.title = '显示图表';
+                    toggleBtn.title = 'Display Chart';
                 } else {
                     chartContent.style.height = '350px';
                     chartContent.style.opacity = '1';
                     toggleBtn.classList.remove('collapsed');
-                    toggleBtn.title = '隐藏图表';
+                    toggleBtn.title = 'Hide Chart';
                 }
             }
 
@@ -1968,7 +1968,7 @@
                     isPaused = data.paused;
                 } catch (error) {
                     // 如果服务器获取失败，从本地存储获取
-                    console.warn('获取服务器暂停状态失败，使用本地存储状态');
+                    console.warn('Failed to retrieve server suspension status; using locally stored status.');
                     const savedPauseState = localStorage.getItem('isPaused');
                     isPaused = savedPauseState === 'true';
                 }
@@ -1976,9 +1976,9 @@
                 // 更新按钮状态
                 const button = document.getElementById('pauseButton');
                 if (isPaused) {
-                    button.textContent = '▶️ 开始统计';
+                    button.textContent = '▶️ Resume';
                 } else {
-                    button.textContent = '⏸️ 暂停统计';
+                    button.textContent = '⏸️ Pause';
                 }
             }
 
@@ -2528,7 +2528,7 @@
                 const statusElement = document.getElementById('chartStatus');
                 if (!statusElement) return;
 
-                statusElement.textContent = `显示 ${visibleCount}/${totalCount} 用户`;
+                statusElement.textContent = `Display ${visibleCount}/${totalCount} User`;
                 statusElement.style.color = '#666';
             }
 
@@ -2558,7 +2558,7 @@
                     const controlDiv = document.createElement('div');
                     controlDiv.className = 'user-controls';
                     controlDiv.dataset.userId = userIdStr;
-                    const placeholderText = hasValidName ? user.name : '昵称';
+                    const placeholderText = hasValidName ? user.name : 'Nickname';
                     controlDiv.innerHTML = `
                     <input type="checkbox" class="visibility-checkbox" ${isVisible ? 'checked' : ''} onchange="toggleUserVisibility(${user.id}, this.checked)">
                     <input type="text" class="user-nickname-input" value="${userNicknames[userIdStr] || ''}" placeholder="${placeholderText}" onchange="updateNickname(${user.id}, this.value)" oninput="updateNickname(${user.id}, this.value)">
@@ -2674,7 +2674,7 @@
 
             // 清空所有昵称
             function clearNicknames() {
-                if (confirm('确定要清空所有自定义昵称吗？')) {
+                if (confirm('Are you sure you want to clear all custom nicknames?')) {
                     userNicknames = {};
                     localStorage.setItem('userNicknames', JSON.stringify(userNicknames));
 
@@ -2805,70 +2805,70 @@
                 const isSimpleMode = document.body.classList.contains('simple-mode');
 
                 // 基础信息组
-                const baseGroup = createColumnGroup('🔰 基础信息', [
-                    { id: 'uid', label: '角色ID', column: 'uid' },
-                    { id: 'nickname', label: '角色昵称', column: 'nickname' },
-                    { id: 'job', label: '职业', column: 'job' },
-                    { id: 'score', label: '评分', column: 'score' },
+                const baseGroup = createColumnGroup('🔰 Basic Information', [
+                    { id: 'uid', label: 'Character ID', column: 'uid' },
+                    { id: 'nickname', label: 'Character Nickname', column: 'nickname' },
+                    { id: 'job', label: 'Occupation', column: 'job' },
+                    { id: 'score', label: 'Rating', column: 'score' },
                     { id: 'hp', label: 'HP', column: 'hp' },
-                    { id: 'takenDamage', label: '承伤', column: 'takenDamage' },
-                    { id: 'deadCount', label: '死亡', column: 'deadCount' },
-                    { id: 'critRate', label: '暴击率', column: 'critRate' },
-                    { id: 'luckyRate', label: '幸运率', column: 'luckyRate' },
+                    { id: 'takenDamage', label: 'Damage Taken', column: 'takenDamage' },
+                    { id: 'deadCount', label: 'Deaths', column: 'deadCount' },
+                    { id: 'critRate', label: 'Critical Hit Rate', column: 'critRate' },
+                    { id: 'luckyRate', label: 'Lucky Hit Rate', column: 'luckyRate' },
                 ]);
                 content.appendChild(baseGroup);
 
                 // 根据当前数据组显示相应的列设置
                 if (currentDataGroup === 'damage' || currentDataGroup === 'all') {
                     // 伤害数据组
-                    const damageOptions = [{ id: 'totalDamage', label: '总伤害', column: 'totalDamage' }];
+                    const damageOptions = [{ id: 'totalDamage', label: 'Total Damage', column: 'totalDamage' }];
 
                     if (!isSimpleMode) {
                         damageOptions.push(
-                            { id: 'pureCrit', label: '纯暴击', column: 'pureCrit' },
-                            { id: 'pureLucky', label: '纯幸运', column: 'pureLucky' },
-                            { id: 'critLucky', label: '暴击幸运', column: 'critLucky' },
+                            { id: 'pureCrit', label: 'True Critical Hit', column: 'pureCrit' },
+                            { id: 'pureLucky', label: 'True Lucky Hit', column: 'pureLucky' },
+                            { id: 'critLucky', label: 'Critical Hit Luck', column: 'critLucky' },
                         );
                     }
 
-                    const damageGroup = createColumnGroup('⚔️ 伤害数据', damageOptions);
+                    const damageGroup = createColumnGroup('⚔️ Damage Data', damageOptions);
                     content.appendChild(damageGroup);
 
                     // DPS数据组
-                    const dpsGroup = createColumnGroup('⚡ DPS数据', [
-                        { id: 'realtimeDps', label: '瞬时DPS', column: 'realtimeDps' },
-                        { id: 'realtimeDpsMax', label: '最大瞬时', column: 'realtimeDpsMax' },
-                        { id: 'dps', label: '总DPS', column: 'dps' },
+                    const dpsGroup = createColumnGroup('⚡ DPS Data', [
+                        { id: 'realtimeDps', label: 'Instantaneous DPS', column: 'realtimeDps' },
+                        { id: 'realtimeDpsMax', label: 'Maximum instantaneous', column: 'realtimeDpsMax' },
+                        { id: 'dps', label: 'Total DPS', column: 'dps' },
                     ]);
                     content.appendChild(dpsGroup);
                 }
 
                 if (currentDataGroup === 'healing' || currentDataGroup === 'all') {
                     // 治疗数据组
-                    const healingOptions = [{ id: 'totalHealing', label: '总治疗', column: 'totalHealing' }];
+                    const healingOptions = [{ id: 'totalHealing', label: 'Overall Healing', column: 'totalHealing' }];
 
                     if (!isSimpleMode) {
                         healingOptions.push(
-                            { id: 'healingPureCrit', label: '纯暴击', column: 'healingPureCrit' },
-                            { id: 'healingPureLucky', label: '纯幸运', column: 'healingPureLucky' },
-                            { id: 'healingCritLucky', label: '暴击幸运', column: 'healingCritLucky' },
+                            { id: 'healingPureCrit', label: 'True Critical Hit', column: 'healingPureCrit' },
+                            { id: 'healingPureLucky', label: 'True Lucky Hit', column: 'healingPureLucky' },
+                            { id: 'healingCritLucky', label: 'Critical Hit Luck', column: 'healingCritLucky' },
                         );
                     }
 
-                    const healingGroup = createColumnGroup('❤️ 治疗数据', healingOptions);
+                    const healingGroup = createColumnGroup('❤️ Healing Data', healingOptions);
                     content.appendChild(healingGroup);
 
                     // HPS数据组
-                    const hpsGroup = createColumnGroup('💚 HPS数据', [
-                        { id: 'realtimeHps', label: '瞬时HPS', column: 'realtimeHps' },
-                        { id: 'realtimeHpsMax', label: '最大瞬时', column: 'realtimeHpsMax' },
-                        { id: 'hps', label: '总HPS', column: 'hps' },
+                    const hpsGroup = createColumnGroup('💚 HPS Data', [
+                        { id: 'realtimeHps', label: 'Instantaneous HPS', column: 'realtimeHps' },
+                        { id: 'realtimeHpsMax', label: 'Maximum instantaneous', column: 'realtimeHpsMax' },
+                        { id: 'hps', label: 'Total HPS', column: 'hps' },
                     ]);
                     content.appendChild(hpsGroup);
                 }
 
                 // 其他组
-                const otherGroup = createColumnGroup('🔧 其他', [{ id: 'actions', label: '操作', column: 'actions' }]);
+                const otherGroup = createColumnGroup('🔧 Others', [{ id: 'actions', label: 'Operation', column: 'actions' }]);
                 content.appendChild(otherGroup);
 
                 // 重新绑定事件
@@ -2918,15 +2918,15 @@
 
                 // 基础信息列（rowspan=2）
                 const baseColumns = [
-                    { column: 'uid', selector: 'th[title="角色唯一标识符"]' },
-                    { column: 'nickname', selector: 'th[title="角色昵称/自定义昵称"]' },
-                    { column: 'job', selector: 'th[title="角色职业"]' },
-                    { column: 'score', selector: 'th[title="角色评分"]' },
-                    { column: 'hp', selector: 'th[title="角色血量"]' },
-                    { column: 'takenDamage', selector: 'th[title="角色在战斗中受到的伤害"]' },
-                    { column: 'deadCount', selector: 'th[title="角色在战斗中死亡次数"]' },
-                    { column: 'critRate', selector: 'th[title="角色在战斗中的暴击伤害次数占总伤害次数的比例"]' },
-                    { column: 'luckyRate', selector: 'th[title="角色在战斗中的幸运伤害次数占总伤害次数的比例"]' },
+                    { column: 'uid', selector: 'th[title="Unique Role Identifier"]' },
+                    { column: 'nickname', selector: 'th[title="Character Nickname/Custom Nickname"]' },
+                    { column: 'job', selector: 'th[title="Character Class"]' },
+                    { column: 'score', selector: 'th[title="Character Rating"]' },
+                    { column: 'hp', selector: 'th[title="Character Health Points"]' },
+                    { column: 'takenDamage', selector: 'th[title="Damage taken by the character during combat"]' },
+                    { column: 'deadCount', selector: 'th[title="Number of times the character died in combat"]' },
+                    { column: 'critRate', selector: 'th[title="The proportion of critical hits to total hits dealt by a character during combat"]' },
+                    { column: 'luckyRate', selector: 'th[title="The proportion of critical hits to total hits during combat"]' },
                 ];
 
                 // 应用基础列的显示/隐藏
@@ -2944,10 +2944,10 @@
 
                 // 伤害相关列
                 const damageColumns = [
-                    { column: 'totalDamage', selector: 'th[title="角色在战斗中造成的总伤害"]' },
-                    { column: 'pureCrit', selector: 'th[title="角色在战斗中造成的非幸运的暴击伤害"]' },
-                    { column: 'pureLucky', selector: 'th[title="角色在战斗中造成的非暴击的幸运伤害"]' },
-                    { column: 'critLucky', selector: 'th[title="角色在战斗中造成的暴击的幸运伤害"]' },
+                    { column: 'totalDamage', selector: 'th[title="Total damage dealt by the character during combat"]' },
+                    { column: 'pureCrit', selector: 'th[title="Non-critical hit damage dealt by the character during combat"]' },
+                    { column: 'pureLucky', selector: 'th[title="Non-critical luck damage dealt by the character during combat"]' },
+                    { column: 'critLucky', selector: 'th[title="Critical hit damage dealt by the character during combat"]' },
                 ];
 
                 damageColumns.forEach(({ column, selector }) => {
@@ -2964,9 +2964,9 @@
 
                 // DPS相关列
                 const dpsColumns = [
-                    { column: 'realtimeDps', selector: 'th[title="角色在战斗中的最近一秒造成的伤害"]' },
-                    { column: 'realtimeDpsMax', selector: 'th[title="角色在战斗中的最大瞬时DPS"]' },
-                    { column: 'dps', selector: 'th[title="角色在战斗中的总DPS（以第一次技能与最后一次技能之间的时间作为有效战斗时间计算）"]' },
+                    { column: 'realtimeDps', selector: 'th[title="Damage dealt by the character in the last second of combat"]' },
+                    { column: 'realtimeDpsMax', selector: 'th[title="Maximum instantaneous DPS of a character during combat"]' },
+                    { column: 'dps', selector: 'th[title="Total DPS of a character during combat (calculated using the time between the first and last skill as effective combat duration)"]' },
                 ];
 
                 dpsColumns.forEach(({ column, selector }) => {
@@ -2983,10 +2983,10 @@
 
                 // 治疗相关列
                 const healingColumns = [
-                    { column: 'totalHealing', selector: 'th[title="角色在战斗中造成的总治疗量"]' },
-                    { column: 'healingPureCrit', selector: 'th[title="角色在战斗中造成的非幸运的暴击治疗量"]' },
-                    { column: 'healingPureLucky', selector: 'th[title="角色在战斗中造成的非暴击的幸运治疗量"]' },
-                    { column: 'healingCritLucky', selector: 'th[title="角色在战斗中造成的暴击的幸运治疗量"]' },
+                    { column: 'totalHealing', selector: 'th[title="Total healing provided by the character during combat"]' },
+                    { column: 'healingPureCrit', selector: 'th[title="Non-critical hit healing dealt by the character during combat"]' },
+                    { column: 'healingPureLucky', selector: 'th[title="Non-critical luck-based healing dealt by the character during combat"]' },
+                    { column: 'healingCritLucky', selector: 'th[title="Critical hit healing amount inflicted by the character during combat"]' },
                 ];
 
                 healingColumns.forEach(({ column, selector }) => {
@@ -3003,9 +3003,9 @@
 
                 // HPS相关列
                 const hpsColumns = [
-                    { column: 'realtimeHps', selector: 'th[title="角色在战斗中的最近一秒造成的伤害和治疗量"]' },
-                    { column: 'realtimeHpsMax', selector: 'th[title="角色在战斗中的最大瞬时HPS"]' },
-                    { column: 'hps', selector: 'th[title="角色在战斗中的总HPS（以第一次技能与最后一次技能之间的时间作为有效战斗时间计算）"]' },
+                    { column: 'realtimeHps', selector: 'th[title="Damage and healing dealt by the character in the last second of combat"]' },
+                    { column: 'realtimeHpsMax', selector: 'th[title="Character\'s maximum instantaneous HPS during combat"]' },
+                    { column: 'hps', selector: 'th[title="Total HPS per character during combat (calculated using the time between the first and last skills as effective combat duration)"]' },
                 ];
 
                 hpsColumns.forEach(({ column, selector }) => {
@@ -3022,7 +3022,7 @@
 
                 // 操作列
                 const actionsHeader = table.querySelector('th:last-child');
-                if (actionsHeader && actionsHeader.textContent.includes('操作')) {
+                if (actionsHeader && actionsHeader.textContent.includes('Operation')) {
                     if (columnVisibility.actions) {
                         actionsHeader.style.removeProperty('display');
                     } else {
@@ -3326,7 +3326,7 @@
         <div id="columnSettingsModal" class="column-settings-modal">
             <div class="column-settings-content">
                 <div class="column-settings-header">
-                    <div class="column-settings-title">⚙️ 表格设置</div>
+                    <div class="column-settings-title">⚙️ Table Settings</div>
                     <button class="close-btn" onclick="closeColumnSettings()">&times;</button>
                 </div>
 
