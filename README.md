@@ -57,7 +57,7 @@ Visit [Quark Disk](https://pan.quark.cn/s/89c4795e0751) to download release vers
 1. **Clone Repository**
 
    ```bash
-   git clone https://github.com/dmlgzs/StarResonanceDamageCounter.git
+   git clone https://github.com/KenfyV2/StarResonanceDamageCounter-EN.git
    cd StarResonanceDamageCounter
    ```
 
