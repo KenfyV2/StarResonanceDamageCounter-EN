@@ -116,17 +116,17 @@ const AttrType = {
 };
 
 const ProfessionType = {
-    雷影剑士: 1,
-    冰魔导师: 2,
-    涤罪恶火_战斧: 3,
-    青岚骑士: 4,
-    森语者: 5,
-    雷霆一闪_手炮: 8,
-    巨刃守护者: 9,
-    暗灵祈舞_仪刀_仪仗: 10,
-    神射手: 11,
-    神盾骑士: 12,
-    灵魂乐手: 13,
+    StormBlade: 1,
+    FrostMage: 2,
+    WingKnight: 3,
+    ShieldKnight: 4,
+    VerdantOracle: 5,
+    ThunderHandcannon: 8,
+    HeavyGuardian: 9,
+    DarkSpiritDancer: 10,
+    Marksman: 11,
+    ShieldKnight: 12,
+    BeatPerformer: 13,
 };
 
 const EDamageSource = {
@@ -153,28 +153,28 @@ const EDamageProperty = {
 
 const getProfessionNameFromId = (professionId) => {
     switch (professionId) {
-        case ProfessionType.雷影剑士:
-            return '雷影剑士';
-        case ProfessionType.冰魔导师:
-            return '冰魔导师';
-        case ProfessionType.涤罪恶火_战斧:
-            return '涤罪恶火·战斧';
-        case ProfessionType.青岚骑士:
-            return '青岚骑士';
-        case ProfessionType.森语者:
-            return '森语者';
-        case ProfessionType.雷霆一闪_手炮:
-            return '雷霆一闪·手炮';
-        case ProfessionType.巨刃守护者:
-            return '巨刃守护者';
-        case ProfessionType.暗灵祈舞_仪刀_仪仗:
-            return '暗灵祈舞·仪刀/仪仗';
-        case ProfessionType.神射手:
-            return '神射手';
-        case ProfessionType.神盾骑士:
-            return '神盾骑士';
-        case ProfessionType.灵魂乐手:
-            return '灵魂乐手';
+        case ProfessionType.StormBlade:
+            return 'StormBlade';
+        case ProfessionType.FrostMage:
+            return 'FrostMage';
+        case ProfessionType.PurifyingFireaxe:
+            return 'PurifyingFireaxe';
+        case ProfessionType.WingKnight:
+            return 'WingKnight';
+        case ProfessionType.VerdantOracle:
+            return 'VerdantOracle';
+        case ProfessionType.ThunderHandcannon:
+            return 'ThunderHandcannon';
+        case ProfessionType.HeavyGuardian:
+            return 'HeavyGuardian';
+        case ProfessionType.DarkSpiritDancer:
+            return 'DarkSpiritDancer';
+        case ProfessionType.Marksman:
+            return 'Marksman';
+        case ProfessionType.ShieldKnight:
+            return 'ShieldKnight';
+        case ProfessionType.BeatPerformer:
+            return 'BeatPerformer';
         default:
             return '';
     }
